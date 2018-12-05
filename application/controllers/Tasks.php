@@ -73,7 +73,7 @@ class Tasks extends MY_Controller{
     
     //put your code here
     public function Add(){
-        $required_fields = ["Description","Category"];
+        $required_fields = ["Description","Category","User_id"];
         $this->ValidateRequiredFields($required_fields, true);
         $user_token = $this->Users_model->GetUsersTokens(['UT.Token', 'UT.Email','U.Id'], ['UT.Token' => $this->json->Token]);
         
@@ -83,7 +83,8 @@ class Tasks extends MY_Controller{
         $task->Description = $this->json->Description;
         $task->Create_date = date("Y-m-d H:i:s");
         $task->Modified_date = date("Y-m-d H:i:s");
-        $task->Users_id = $user_token->Id;
+        //$task->Users_id = $user_token->Id;
+        $task->Users_id = $this->json->User_id;
         $task->Completed = false;
         
         if($this->Task_model->AddTask($task)){
@@ -91,6 +92,30 @@ class Tasks extends MY_Controller{
         }
         else{
             return $this->ShowOutput(400, ['Error' => ['Message' => "Task couldn't be added"]]);
+        }
+    }
+    
+    public function Edit(){
+          $required_fields = ["Description","Category","User_id", "Task_id"];
+        $this->ValidateRequiredFields($required_fields, true);
+        //$user_token = $this->Users_model->GetUsersTokens(['UT.Token', 'UT.Email','U.Id'], ['UT.Token' => $this->json->Token]);
+        
+        $task = new StdClass();
+        $task->Parent_id = isset($this->json->Parent_id) ? $this->json->Parent_id  : null;
+        $task->Tasks_categories_id = $this->json->Category;
+        $task->Description = $this->json->Description;
+        $task->Create_date = date("Y-m-d H:i:s");
+        $task->Modified_date = date("Y-m-d H:i:s");
+        //$task->Users_id = $user_token->Id;
+        $task->Users_id = $this->json->User_id;
+        $task->Completed = false;
+        
+        
+        if($this->Task_model->EditTask($task,['Id' => $this->json->Task_id])){
+            return $this->showOutput(200, ['Task_edited' => $task]);
+        }
+        else{
+            return $this->ShowOutput(400, ['Error' => ['Message' => "Task couldn't be edited"]]);
         }
     }
    

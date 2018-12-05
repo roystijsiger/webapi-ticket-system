@@ -115,6 +115,16 @@ class Users extends MY_Controller{
                 $this->showOutput(200, ['Error' => ['Error' => null, 'Message' => "Logout failed"]]);   
             }
         }
+        
+        public function GetAll(){
+            $users = $this->Users_model->GetUsers([],[],false);
+            
+            if(!$users){
+                  $this->ShowOutput(404, "No users found");
+            }
+            
+            $this->ShowOutput(200, ['users' => $users]);
+        }
 }
 /* this is for creating a password..
  * //get a string length for our salt.

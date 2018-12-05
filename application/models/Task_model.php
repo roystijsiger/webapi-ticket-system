@@ -96,6 +96,12 @@ class Task_model extends CI_Model{
         return $this->db->insert('Tasks', $task);
     }
     
+    public function EditTask($task, $clauses){
+        foreach($clauses as $key => $value){
+            $this->db->where($key, $value);
+        }
+        return $this->db->update('Tasks', $task);
+    }
     /*
      * Time spetn section
      */

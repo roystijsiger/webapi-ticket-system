@@ -167,6 +167,7 @@ class MY_Controller extends CI_Controller{
             
         //see if permissions are needed
         $permission_found = $this->Permissions_model->GetPermissionAction($select = ['Id', 'Action'], $clauses= ['Action' => $action]);
+        //var_dump($permission_found) ; die;
         if($permission_found){
             if(!$this->userPermissions){
                 $this->ShowOutput($status = 401, $error = ['Error' => ['Message' => "Not authorized"]]);    
@@ -177,6 +178,8 @@ class MY_Controller extends CI_Controller{
                         return true;
                     }
                 }
+                
+                $this->ShowOutput($status = 401, $error = ['Error' => ['Message' => "Not authorized"]]);  
             }
             
         }
